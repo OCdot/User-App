@@ -1,118 +1,116 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {Provider, useSelector} from 'react-redux';
+import Login from './src/Screens/Login';
+import Home from './src/Screens/Home';
+import Signup from './src/Screens/Signup';
+import {store} from './src/Resources/Redux/store';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Profile from './src/Screens/Profile';
+import CustomFooter from './src/Resources/CustomFooter';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import CustomDrawer from './src/Resources/CustomDrawer';
+import Screen1 from './src/Screens/Screen1';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const Stack = createStackNavigator();
+const Footer = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+// const AppNavigation = () => {
+//   const isLoggedIn = useSelector(state => state.isLoggedIn);
+//   console.log('isLoggedIn', isLoggedIn);
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+//   return (
+//     <NavigationContainer>
+//       {/* {console.log(isLoggedIn.isLoggedIn)} */}
+//       <Stack.Navigator screenOptions={{headerShown: false}}>
+//         {isLoggedIn ? (
+//           <Stack.Screen name="DrawerNav" component={DrawerNav} />
+//         ) : (
+//           // <Stack.Screen component={FooterNavigation} name='FooterNavigation'/>
+//           <>
+//             <Stack.Screen name="Login" component={Login} />
+//             <Stack.Screen name="Signup" component={Signup} />
+//           </>
+//         )}
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// };
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+// const FooterNavigation = () => {
+//   return (
+//     <Footer.Navigator
+//       tabBar={props => <CustomFooter {...props} />}
+//       screenOptions={{headerShown: false}}>
+//       <Footer.Screen component={Home} name="Home" />
+//       <Footer.Screen component={Profile} name="Profile" />
+//     </Footer.Navigator>
+//   );
+// };
+
+// const DrawerNav = () => {
+//   return (
+//     <Drawer.Navigator
+//       drawerContent={props => <CustomDrawer {...props} />}
+//       screenOptions={{headerShown: false}}>
+//       <Drawer.Screen component={FooterNavigation} name="FooterNavigation" />
+//       <Drawer.Screen component={Profile} name="Profile" />
+//     </Drawer.Navigator>
+//   );
+// };
+
+const AppNavigation = () => {
+  const isLoggedIn = useSelector(state => state.isLoggedIn);
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <NavigationContainer>
+      {isLoggedIn ? (
+        <Drawer.Navigator
+          drawerContent={props => <CustomDrawer {...props} />}
+          screenOptions={{headerShown: false,}}>
+          <Stack.Screen component={FooterNav} name="FooterNav" />
+          <Drawer.Screen component={Profile} name="Profile" />
+          <Drawer.Screen component={Screen1} name='Screen1'/>
+        </Drawer.Navigator>
+      ) : (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen component={Login} name="Login" />
+          <Stack.Screen component={Signup} name="Signup" />
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
   );
-}
+};
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+// const FooterDrawer = ()=>{
+//   return(
+//     <Stack.Navigator>
+//       <Footer.Screen component={Profile} name='Profile'/>
+//       <Stack.Screen component={FooterNav} name='FooterNav'/>
+//     </Stack.Navigator>
+//   )
+// }
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
+const FooterNav = () => {
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Footer.Navigator
+      screenOptions={{headerShown: false}}
+      tabBar={props => <CustomFooter {...props} />}>
+      <Footer.Screen component={Home} name="Home" />
+      <Footer.Screen component={Profile} name="Profile" />
+      <Footer.Screen name="Screen1" component={Screen1} />
+    </Footer.Navigator>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+const App = () => {
+  return (
+    <Provider store={store}>
+      <AppNavigation />
+    </Provider>
+  );
+};
 
 export default App;

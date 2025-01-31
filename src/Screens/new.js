@@ -27,8 +27,8 @@ const MyDrawer = () => {
           </ScrollView>
         </View>}>
       <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} options={{ title: () => null, headerShown: false }} />
-      {/* <Drawer.Screen name="Profile" component={Profile} />
-      <Drawer.Screen name="Notification" component={Notification} /> */}
+      <Drawer.Screen name="Profile" component={Profile} /> //added
+      <Drawer.Screen name="Notification" component={Notification} /> // added
     </Drawer.Navigator>
   );
 }
